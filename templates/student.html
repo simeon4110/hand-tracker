@@ -1,37 +1,31 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <input type="text" id="classNumber" value="Class Number"/>
-    <button type="submit" onclick="setClassNumber()" name="classNumberSubmit" value="Submit">Submit</button>
-
-    <button onclick="sendMyMessages()">Test</button>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-centered">
+                <form action="join-class/" method="post" class="form-horizontal">
+                    <h4 class="display-4">{{ title }}</h4>
+                    <hr style="border-color: black"/>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_student_name" class="control-label">Your full name: </label>
+                        {{ form.student_name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_class_number" class="control-label">Class Number: </label>
+                        {{ form.class_number }}
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Join Class" class="btn btn-primary mt-2"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
-        var hand_up = Boolean(false);
-        var classNumber = null;
 
-        socket.onopen = function () {
-            socket.send("Test");
-            alert("Connection opened...");
-        };
-
-        function sendMyMessages() {
-            socket.send("Hello from the other sIIIIIde.");
-
-        }
-
-        function setClassNumber() {
-            classNumber = document.getElementById("classNumber").value;
-            alert(classNumber);
-        }
-
-        function joinClass(classNumber) {
-
-        }
-
-    </script>
 {% endblock %}

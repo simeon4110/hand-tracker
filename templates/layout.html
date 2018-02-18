@@ -33,8 +33,7 @@
     {# Display the Header   #}
     {% if request.resolver_match.url_name != "home" %}
         <div class="container-fluid">
-            <h1 class="display-4">{{ title }}</h1>
-            <hr style="border-color: white"/>
+            {# put the page title here if needed #}
         </div>
     {% endif %}
 

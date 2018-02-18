@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'channels_redis',
+    'app'
 ]
 
 MIDDLEWARE = [

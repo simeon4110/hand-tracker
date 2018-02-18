@@ -29,6 +29,7 @@ class StudentConsumer(WebsocketConsumer):
 
 
 class ProfessorConsumer(WebsocketConsumer):
+
     def connect(self):
         self.accept()
         self.scope["session"]["seed"] = random.randint(1, 1000)

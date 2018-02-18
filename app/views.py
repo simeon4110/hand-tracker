@@ -15,6 +15,25 @@ from app.forms import *
 
 
 def home(request):
+    return render(
+        request,
+        'index.html',
+        {
+            'title': 'Home',
+            'year': datetime.datetime.now().year
+        }
+    )
+
+
+def professor_create(request):
+    return None
+
+
+def class_run(request):
+    return None
+
+
+def student_join(request):
     """
 
     :param request:
@@ -25,7 +44,8 @@ def home(request):
         request,
         'student.html',
         {
-            'title': 'Classroom - Student',
+            'title': 'Student - Join Class',
             'year': datetime.datetime.now().year,
+            'form': StudentJoinForm,
         }
     )

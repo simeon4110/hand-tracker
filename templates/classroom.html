@@ -1,0 +1,46 @@
+<script>
+    var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
+    var hand_up = Boolean(false);
+    var classNumber = null;
+
+    socket.onopen = function () {
+        socket.send("Test");
+        alert("Connection opened...");
+    };
+
+    function hideClassJoinInput() {
+        var x = document.getElementById("ClassJoinInput");
+        if (classNumber == null) {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    function sendMyMessages() {
+        socket.send("Hello from the other sIIIIIde.");
+        socket.event
+
+    }
+
+    function setClassNumber() {
+        classNumber = document.getElementById("classNumber").value;
+        alert(classNumber);
+        hideClassJoinInput();
+    }
+
+    function joinClass(classNumber) {
+
+    }
+
+    function raiseHand() {
+        hand_up = true;
+        alert(hand_up);
+    }
+
+    function lowerHand() {
+        hand_up = false;
+        alert(hand_up);
+    }
+
+</script>
