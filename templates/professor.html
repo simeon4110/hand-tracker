@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-centered">
+                <form action="." method="post" class="form-horizontal">
+                    <h4 class="display-4">{{ title }}</h4>
+                    <hr style="border-color: black"/>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_student_name" class="control-label">Your full name: </label>
+                        {{ form.professor_name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_class_number" class="control-label">Class Number: </label>
+                        {{ form.professor_email }}
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Join Class" class="btn btn-primary mt-2"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

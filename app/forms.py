@@ -35,10 +35,10 @@ class ClassCreationForm(forms.ModelForm):
         widgets = {
             'professor_name': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Your name',
+                'placeholder': 'i.e. Dr. George Wallace III',
             }),
             'professor_email': forms.EmailInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Your name',
+                'placeholder': 'i.e. george@harvard.edu',
             })
         }

@@ -26,7 +26,15 @@ def home(request):
 
 
 def professor_create(request):
-    return None
+    return render(
+        request,
+        'professor.html',
+        {
+            'title': 'Student - Join Class',
+            'year': datetime.datetime.now().year,
+            'form': ClassCreationForm,
+        }
+    )
 
 
 def class_run(request):

@@ -25,6 +25,19 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% if request.resolver_match.url_name == "home" %}active{% endif %}">
+                <a class="nav-link" href="/">Home{% if request.resolver_match.url_name == "home" %}
+                    <span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == "student" %}active{% endif %}">
+                <a class="nav-link" href="/student">Join Class{% if request.resolver_match.url_name == "student" %}
+                    <span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == "professor" %}active{% endif %}">
+                <a class="nav-link" href="/professor">Create Class
+                    {% if request.resolver_match.url_name == "professor" %}
+                        <span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
         </ul>
     </div>
 </nav>
