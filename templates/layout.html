@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content=""/>
+    <meta name="author" content="Josh Harkema">
+
+    <title>{{ title }} - Hand Tracker</title>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'site.min.css' %}"/>
+</head>
+
+<body>
+
+<nav class="navbar fixed-top navbar-expand-md navbar-dark bg-primary mb-4">
+    <a class="navbar-brand" href="/">Hand Tracker</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+    </div>
+</nav>
+<main role="main" class="container">
+
+    {# Display the Header   #}
+    {% if request.resolver_match.url_name != "home" %}
+        <div class="container-fluid">
+            <h1 class="display-4">{{ title }}</h1>
+            <hr style="border-color: white"/>
+        </div>
+    {% endif %}
+
+    {# Display any messages   #}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {# Insert content block   #}
+    {% block content %}{% endblock %}
+
+    <hr class="my-4" style="border-color: white"/>
+
+    <footer>
+        <p style="text-align: center">&copy; {{ year }} - Josh Harkema - <strong>Licensed under CC-BY-SA 2.5</strong> -
+            <a href="https://creativecommons.org/licenses/by-sa/2.5/ca/">
+                https://creativecommons.org/licenses/by-sa/2.5/ca/</a></p>
+        <p style="text-align: center">Use of this project is AT YOUR OWN RISK it is still undergoing
+            bug fixing and testing.</p>
+    </footer>
+
+</main>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

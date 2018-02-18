@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <button onclick="sendMyMessages()">Test</button>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
+
+    socket.onopen = function () {
+        socket.send("Test");
+        alert("Connection opened...");
+    };
+
+    function sendMyMessages() {
+        socket.send("Hello from the other sIIIIIde.");
+
+    }
+
+</script>
+{% endblock %}

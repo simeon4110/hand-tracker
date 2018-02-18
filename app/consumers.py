@@ -11,8 +11,10 @@ class StudentConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
         async_to_sync(self.channel_layer.group_add)("student", self.channel_name)
-        self.scope["session"]["seed"] = random.randint(1, 1000)
-        self.scope["session"].save()
+
+        if not self.scope["session"]:
+            self.scope["session"]["seed"] = random.randint(1, 1000)
+            self.scope["session"].save()
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)("student",

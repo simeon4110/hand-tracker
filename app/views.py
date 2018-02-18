@@ -23,8 +23,9 @@ def home(request):
 
     return render(
         request,
-        'index.html',
+        'student.html',
         {
-            'title': 'Home Page'
+            'title': 'Home Page',
+            'year': datetime.datetime.now().year,
         }
     )
