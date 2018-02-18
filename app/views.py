@@ -30,7 +30,7 @@ def professor_create(request):
         request,
         'professor.html',
         {
-            'title': 'Student - Join Class',
+            'title': 'Create Class',
             'year': datetime.datetime.now().year,
             'form': ClassCreationForm,
         }
@@ -52,7 +52,7 @@ def student_join(request):
         request,
         'student.html',
         {
-            'title': 'Student - Join Class',
+            'title': 'Join Class',
             'year': datetime.datetime.now().year,
             'form': StudentJoinForm,
         }
