@@ -25,7 +25,7 @@ def home(request):
         request,
         'student.html',
         {
-            'title': 'Home Page',
+            'title': 'Classroom - Student',
             'year': datetime.datetime.now().year,
         }
     )

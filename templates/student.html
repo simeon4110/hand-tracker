@@ -1,23 +1,37 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    <input type="text" id="classNumber" value="Class Number"/>
+    <button type="submit" onclick="setClassNumber()" name="classNumberSubmit" value="Submit">Submit</button>
+
     <button onclick="sendMyMessages()">Test</button>
 
 {% endblock %}
 
 {% block scripts %}
-<script>
-    var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
+    <script>
+        var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
+        var hand_up = Boolean(false);
+        var classNumber = null;
 
-    socket.onopen = function () {
-        socket.send("Test");
-        alert("Connection opened...");
-    };
+        socket.onopen = function () {
+            socket.send("Test");
+            alert("Connection opened...");
+        };
 
-    function sendMyMessages() {
-        socket.send("Hello from the other sIIIIIde.");
+        function sendMyMessages() {
+            socket.send("Hello from the other sIIIIIde.");
 
-    }
+        }
 
-</script>
+        function setClassNumber() {
+            classNumber = document.getElementById("classNumber").value;
+            alert(classNumber);
+        }
+
+        function joinClass(classNumber) {
+
+        }
+
+    </script>
 {% endblock %}
