@@ -8,13 +8,24 @@
 
     <title>{{ title }}</title>
 
+    <button onclick="sendMyMessages()">Test</button>
+
 </head>
 
 <body>
 </body>
 
 <script>
-    var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/")
+    var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
 
+    socket.onopen = function () {
+        socket.send("Test");
+        alert("Connection opened...");
+    };
+
+    function sendMyMessages() {
+        socket.send("Hi from the client.");
+
+    }
 
 </script>
