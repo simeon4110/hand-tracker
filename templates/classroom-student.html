@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var socket = new WebSocket("ws://127.0.0.1:8000/student-socket/");
+
+    socket.onopen = function () {
+        socket.send(JSON.stringify({"class_number": 10020, "student_name": "Josh"}));
+    };
+
+    socket.onmessage = function (ev) {
+        alert(ev.data);
+    }
+
+
+</script>
+{% endblock %}

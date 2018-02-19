@@ -37,7 +37,17 @@ def professor_create(request):
     )
 
 
-def class_run(request):
+def class_run_student(request):
+    return render(
+        request,
+        'classroom-student.html',
+        {
+            'title': 'Hand Tracker'
+        }
+    )
+
+
+def class_run_professor(request):
     return None
 
 

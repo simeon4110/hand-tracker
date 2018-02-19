@@ -8,6 +8,7 @@ from app.views import *
 urlpatterns = [
     path('', home, name='home'),
     path('student/', student_join, name='student'),
+    path('student/class', class_run_student, name='student-class'),
     path('professor/', professor_create, name='professor'),
-    path('class/', class_run, name='class'),
+    path('professor/class', class_run_professor, name='professor-class'),
 ]
