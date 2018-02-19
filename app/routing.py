@@ -9,8 +9,7 @@ application = ProtocolTypeRouter({
 
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            url("^student-socket/$", JoinClass, name="student"),
-            # url("^professor-socket/$", ProfessorConsumer, name="professor")
+            url("^websocket/$", ClassConsumer, name="websocket"),
         ])
     ),
 })

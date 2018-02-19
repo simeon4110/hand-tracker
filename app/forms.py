@@ -25,11 +25,11 @@ class StudentJoinForm(forms.ModelForm):
 
 
 class ClassCreationForm(forms.ModelForm):
+
     class Meta:
         model = ClassRoom
-        ClassRoom.class_number = random.randint(1, 999999)
 
-        fields = ['professor_name', 'professor_email']
+        fields = ['professor_name', 'professor_email', 'class_number']
         labels = ({'professor_name': _('Your name.'),
                    'professor_email': _('Your email.')})
         widgets = {

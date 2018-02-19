@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'layout.html' %}
 
-</body>
-</html>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-centered">
+                <h4 class="presentation-4">{{ title }}</h4>
+                <hr style="border-color: black"/>
+                <p class="lead">Class Number: {{ class_number }}</p>
+                <div id="class">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            var socket = new WebSocket("ws://127.0.0.1:8000/websocket/");
+
+            socket.onopen = function (ev) {
+                console.log("Connection to websocket opened.");
+                socket.send(JSON.stringify({"command": "join-prof", "class_id": "{{ class_number }}"}));
+            };
+
+            socket.onmessage = function (message) {
+                console.log("Got websocket message " + message.data);
+
+                var data = JSON.parse(message.data);
+
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+
+            }
+        });
+
+    </script>
+{% endblock %}
