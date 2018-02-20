@@ -102,7 +102,7 @@
                 dataSet = [];
 
                 for (var key in data["user_list"]) {
-                    var link_text = String("<button class='btn btn-sm' onclick='acknowledge(" + data["user_list"][key][1] + ")'><span class=\"oi oi-check\"></span></button>");
+                    var link_text = String("<button class='btn button-primary' onclick='acknowledge(" + data["user_list"][key][1] + ")'><span class=\"oi oi-check\"></span></button>");
                     dataSet.push([key, data["user_list"][key][0], link_text]);
                     console.log(dataSet);
                 }

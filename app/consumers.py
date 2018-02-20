@@ -8,7 +8,7 @@ from app.models import Student
 
 
 class ClassConsumer(AsyncJsonWebsocketConsumer):
-    rooms = None
+    room = None
 
     async def connect(self):
         """
@@ -16,7 +16,6 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         :return: Nothing
         """
         await self.accept()
-        self.rooms = set()
 
     async def receive_json(self, content, **kwargs):
         """
@@ -140,7 +139,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             }
         )
 
-        self.rooms.add(room.id)  # This is needed for proper socket closing.
+        self.room = room.id  # This is needed for proper socket closing.
 
         await self.channel_layer.group_add(
             room.group_name,
@@ -166,12 +165,10 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             room.group_name,
             {
                 "type": "room.leave",
-                "class_id": class_id,
+                "class_id": room.group_name,
                 "user_name": user_name,
             }
         )
-
-        self.rooms.discard(class_id)
 
         await self.channel_layer.group_discard(
             room.group_name,
@@ -183,8 +180,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def disconnect(self, code):
-        for room in self.rooms:
-            await self.leave_class(room, "")
+        await self.leave_class(self.room, "")
 
     # HELPER METHODS -- Handle the message dispatching. And object manipulation.
 
