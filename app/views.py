@@ -152,8 +152,6 @@ def class_report(request):
         class_number = request.GET.get("class_id")
         try:
             class_room = ClassRoom.objects.get(class_number=class_number)
-            class_room.is_running = False
-            class_room.save()
         except Exception as e:
             print(e)
             return None
@@ -166,9 +164,9 @@ def class_report(request):
         # Append all the student data to the student list, delete the student.
         for student in student_list:
             report_list.append([student[0], student[1]])
-            student.delete()
 
         # Delete the classroom.
+        class_number = class_room.class_number
         class_room.delete()
 
         return render(
@@ -178,6 +176,6 @@ def class_report(request):
                 'title': 'End of Class Report',
                 'year': datetime.datetime.now().year,
                 'report_data': report_list,
-                'class_number': class_room.class_number,
+                'class_number': class_number,
             }
         )

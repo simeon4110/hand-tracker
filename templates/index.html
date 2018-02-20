@@ -1,7 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-centered">
+                <h4 class="display-4">{{ title }}</h4>
+                <hr style="border-color: black"/>
+                <p class="lead">
+                    This webapp can be used to track contributions in a classroom environment. No personal information
+                    is stored--when a professor ends a class, all student names and info are purged from the database.
+                    This webapp is totally free for anyone to use, no accounts are needed, no signup, just create a
+                    class and start tracking!
+                </p>
+                <br/>
+                <p style="text-align: center;"><a href="student/">
+                    <button class="btn btn-lg btn-primary">Join a Class &raquo;</button>
+                </a></p>
+                <p style="text-align: center;"><a href="professor/">
+                    <button class="btn btn-lg btn-primary">Create a Class &raquo;</button>
+                </a></p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
