@@ -39,6 +39,6 @@ class ClassCreationForm(forms.ModelForm):
             }),
             'professor_email': forms.EmailInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'i.e. george@harvard.edu',
+                'placeholder': 'i.e. georgito@harvard.edu',
             })
         }
