@@ -36,9 +36,6 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         if command == "acknowledge":
             await self.acknowledge(class_id, user_name)  # Uses ID actually.
 
-        if command == "end-clas":
-            await self.end_class(class_id)
-
         if command == "join":
             await self.join_class(class_id, user_name)
 
