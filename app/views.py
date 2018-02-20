@@ -2,10 +2,14 @@
 Definition of views.
 """
 import datetime
+import random
 
 from django.shortcuts import render
 
-from app.forms import *
+from app.forms import ClassCreationForm
+from app.forms import StudentJoinForm
+from app.models import ClassRoom
+from app.models import Student
 
 
 def home(request):
