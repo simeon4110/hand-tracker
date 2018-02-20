@@ -1,7 +1,5 @@
-import random
-import json
-from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+
 from app.models import ClassRoom
 from app.models import Student
 
@@ -23,6 +21,9 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         if command == "join-prof":
             await self.join_class(class_id, user_name)
 
+        if command == "clear-hands":
+            await self.clear_hands(class_id)
+
         if command == "join":
             await self.join_class(class_id, user_name)
 
@@ -30,12 +31,26 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             await self.leave_class(class_id, user_name)
 
         if command == "raise":
+            await self.set_hand(class_id, user_name, True)
+
+        if command == "lower":
             await self.set_hand(class_id, user_name, False)
 
-    async def set_hand(self, class_id, student_name, hand):
-        if hand != "True" or hand != "False":
-            print("Hand must equal True or False")
+    async def clear_hands(self, class_id):
+        print("clearing")
+        try:
+            room = ClassRoom.objects.get(class_number=class_id)
+        except Exception as e:
+            print(e)
             return None
+
+        student_list = Student.objects.filter(class_room=room.id)
+
+        for student in student_list:
+            student.hand = False
+            student.save()
+
+    async def set_hand(self, class_id, student_name, hand):
 
         try:
             room = ClassRoom.objects.get(class_number=class_id)
@@ -44,31 +59,17 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             print(e)
             return None
 
-        if hand:
-            student.hand = hand
-            student.save()
+        student.hand = hand
+        student.save()
 
-            await self.channel_layer.group_send(
-                room.group_name,
-                {
-                    "type": "hand.raise",
-                    "class_id": class_id,
-                    "username": student_name,
-                }
-            )
-
-        else:
-            student.hand = hand
-            student.save()
-
-            await self.channel_layer.group_send(
-                room.group_name,
-                {
-                    "type": "hand.lower",
-                    "class_id": class_id,
-                    "username": student_name,
-                }
-            )
+        await self.channel_layer.group_send(
+            room.group_name,
+            {
+                "type": "hand.change",
+                "class_id": class_id,
+                "username": student_name,
+            }
+        )
 
     async def join_class(self, class_id, user_name):
 
@@ -91,7 +92,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             }
         )
 
-        self.rooms.add(room.group_name)
+        self.rooms.add(room.id)
 
         await self.channel_layer.group_add(
             room.group_name,
@@ -105,7 +106,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
 
     async def leave_class(self, class_id, user_name):
 
-        room = ClassRoom.objects.get(class_number=class_id)
+        room = ClassRoom.objects.get(pk=class_id)
 
         await self.channel_layer.group_send(
             room.group_name,
@@ -124,16 +125,17 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         )
 
         await self.send_json({
-            "leave": room.group_name
+            "leave": room.id
         })
 
     async def disconnect(self, code):
         for room in self.rooms:
-            await self.leave_class(room.id, "")
+            await self.leave_class(room, "")
+
+    # HELPER METHODS.
 
     async def room_join(self, event):
-        print(event["class_id"])
-        await  self.send_json(
+        await self.send_json(
             {
                 "msg_type": 0,
                 "room": event["class_id"],
@@ -147,5 +149,23 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
                 "msg_type": 0,
                 "room": event["class_id"],
                 "username": event["username"],
+            }
+        )
+
+    async def hand_change(self, event):
+        class_room = ClassRoom.objects.get(class_number=event["class_id"])
+        hand_list = {}
+
+        for student in Student.objects.filter(
+                class_room=class_room.id).values_list("hand", "student_name",
+                                                      "modifier"):
+            if student[0]:
+                hand_list[student[1]] = student[2]
+
+        await self.send_json(
+            {
+                "msg_type": 2,
+                "room": event["class_id"],
+                "user_list": hand_list,
             }
         )

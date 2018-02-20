@@ -1,26 +1,49 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-centered">
+                <button onclick="raiseHand()" class="btn btn-primary btn-lg">Raise Hand</button>
+                <br/>
+                <button onclick="lowerHand()" class="btn btn-primary btn-lg">Lower Hand</button>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    var socket = new WebSocket("ws://127.0.0.1:8000/websocket/");
+    <script>
+        var socket = new WebSocket("ws://127.0.0.1:8000/websocket/");
 
-    socket.onopen = function () {
-        socket.send(JSON.stringify({
-            "command": "join",
-            "class_id": "{{ class_number }}",
-            "student_name": "{{ student_name }}"
-        }));
-        console.log("Sending string.")
-    };
+        socket.onopen = function () {
+            socket.send(JSON.stringify({
+                "command": "join",
+                "class_id": "{{ class_number }}",
+                "student_name": "{{ student_name }}"
+            }));
+            console.log("Sending string.")
+        };
 
-    socket.onmessage = function (ev) {
-        alert(ev.data);
-    }
+        socket.onmessage = function (ev) {
+            console.log(ev.data);
+        };
 
+        function raiseHand() {
+            socket.send(JSON.stringify({
+                "command": "raise",
+                "class_id": "{{ class_number }}",
+                "student_name": "{{ student_name }}"
+            }))
+        }
 
-</script>
+        function lowerHand() {
+            socket.send(JSON.stringify({
+                "command": "lower",
+                "class_id": "{{ class_number }}",
+                "student_name": "{{ student_name }}"
+            }))
+        }
+
+    </script>
 {% endblock %}
