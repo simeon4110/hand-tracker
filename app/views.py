@@ -57,7 +57,6 @@ def class_run_student(request):
         if form.is_valid():
             class_number = form.cleaned_data.get("class_number")
             student_name = form.cleaned_data.get("student_name")
-            student_id = None
 
             # Check if the student already exists, if not create the student,
             # if the student exists AND is already in the correct class, use
@@ -121,6 +120,35 @@ def class_run_professor(request):
             )
 
     return None
+
+
+def class_report(request):
+    if request.GET.get("class_id") is not None:
+        class_number = request.GET.get("class_id")
+        try:
+            class_room = ClassRoom.objects.get(class_number=class_number)
+        except Exception as e:
+            print(e)
+            return None
+
+        report_list = []
+
+        student_list = Student.objects.filter(class_room=class_room).values_list(
+            "student_name", "acknowledged")
+
+        for student in student_list:
+            report_list.append([student[0], student[1]])
+
+        return render(
+            request,
+            'classroom-report.html',
+            {
+                'title': 'End of Class Report',
+                'year': datetime.datetime.now().year,
+                'report_data': report_list,
+                'class_number': class_room.class_number,
+            }
+        )
 
 
 def student_join(request):

@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-centered">
+                <h4 class="display-4">{{ title }}</h4>
+                <hr style="border-color: black"/>
+                <p class="lead">Report for Class Number: {{ class_number }}</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-11 col-centered">
+                <table id="report" class="table table-bordered" cellspacing="0" width="100%">
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
+    <script>
+
+        {# Draw the table #}
+        $(document).ready(function () {
+            $('#report').DataTable({
+                bFilter: false,
+                bInfo: false,
+                bPaginate: false,
+                data: {{ report_data | safe }},
+                columns: [
+                    {title: "Name"},
+                    {title: "Acknowledgments"}
+                ]
+            });
+        })
+
+    </script>
+
+{% endblock %}

@@ -11,4 +11,5 @@ urlpatterns = [
     path('student/class', class_run_student, name='student-class'),
     path('professor/', professor_create, name='professor'),
     path('professor/class', class_run_professor, name='professor-class'),
+    path('professor/class/report', class_report, name='report'),
 ]

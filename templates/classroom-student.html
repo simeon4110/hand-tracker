@@ -33,6 +33,7 @@
 
         {# Raise your hand #}
         function raiseHand() {
+            console.log({{ student_id }});
             socket.send(JSON.stringify({
                 "command": "raise",
                 "class_id": "{{ class_number }}",
