@@ -1,3 +1,6 @@
+"""
+The async WebSockets -- Currently only a single Json consumer.
+"""
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from app.models import ClassRoom
@@ -8,12 +11,19 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
     rooms = None
 
     async def connect(self):
+        """
+        Accepts all incoming connections, because why not?
+        :return: Nothing
+        """
         await self.accept()
         self.rooms = set()
 
-        print("connection opened")  # :TODO: Remove after debugging.
-
     async def receive_json(self, content, **kwargs):
+        """
+        Deals with all incoming hits to the WebSocket. Routes traffic via
+        command definitions.
+        :return: Nothing.
+        """
         command = content.get("command", None)
         class_id = content.get("class_id", None)
         user_name = content.get("student_name", None)
@@ -36,8 +46,13 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         if command == "lower":
             await self.set_hand(class_id, user_name, False)
 
-    async def clear_hands(self, class_id):
-        print("clearing")
+    @staticmethod
+    async def clear_hands(class_id):
+        """
+        Clears all the hands raised in a ClassRoom.
+        :param class_id: The ClassRoom to clear.
+        :return: Nothing.
+        """
         try:
             room = ClassRoom.objects.get(class_number=class_id)
         except Exception as e:
@@ -51,6 +66,13 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             student.save()
 
     async def set_hand(self, class_id, student_name, hand):
+        """
+        Set's a student's hand to raised (true) or not (false).
+        :param class_id: The class the student is in.
+        :param student_name: The student's name.
+        :param hand: Boolean true = raised.
+        :return: Initiates event to reset list of raised hands.
+        """
 
         try:
             room = ClassRoom.objects.get(class_number=class_id)
@@ -72,16 +94,17 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def join_class(self, class_id, user_name):
-
+        """
+        Joins a specific class channel.
+        :param class_id: The class to join.
+        :param user_name: The user's user_name.
+        :return: Initiates an join event, broadcasting to all room members.
+        """
         try:
             room = ClassRoom.objects.get(class_number=class_id)
-
-        # :TODO: Not this.
         except Exception as e:
             print(e)
             return None
-
-        print("Joining " + room.group_name)
 
         await self.channel_layer.group_send(
             room.group_name,
@@ -92,7 +115,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             }
         )
 
-        self.rooms.add(room.id)
+        self.rooms.add(room.id)  # This is needed for proper socket closing.
 
         await self.channel_layer.group_add(
             room.group_name,
@@ -105,6 +128,12 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def leave_class(self, class_id, user_name):
+        """
+        :TODO: Fix this!!!!
+        :param class_id: The class to leave.
+        :param user_name: The person leaving.
+        :return: An event notifying the room a user has left.
+        """
 
         room = ClassRoom.objects.get(pk=class_id)
 
@@ -132,7 +161,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         for room in self.rooms:
             await self.leave_class(room, "")
 
-    # HELPER METHODS.
+    # HELPER METHODS -- Handle the message dispatching. And object manipulation.
 
     async def room_join(self, event):
         await self.send_json(

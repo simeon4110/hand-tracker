@@ -38,8 +38,22 @@
             ]
         });
 
+        {# Clear the table, function initiates a reset of all the student's hand states #}
         function clearTable() {
             dataSet = [];
+            table.destroy();
+            {# I wish there was a way I could do it without wiping the table every time, but there isn't. #}
+            table = $('#class').DataTable({
+                bFilter: false,
+                bInfo: false,
+                bPaginate: false,
+                data: dataSet,
+                columns: [
+                    {title: "Name"},
+                    {title: "Modifier"},
+                    {title: ""}
+                ]
+            });
             socket.send(JSON.stringify({"command": "clear-hands", "class_id": "{{ class_number }}"}));
         }
 
