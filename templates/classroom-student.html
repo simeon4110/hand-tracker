@@ -3,10 +3,15 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-md-6 col-centered">
-                <button onclick="raiseHand()" class="btn btn-primary btn-lg">Raise Hand</button>
-                <br/>
-                <button onclick="lowerHand()" class="btn btn-primary btn-lg">Lower Hand</button>
+            <div class="col-md-6 justify-content-center">
+                <h4 class="display-4">{{ title }}</h4>
+                <hr style="border-color: black"/>
+                <p style="text-align: center">
+                    <button onclick="raiseHand()" class="btn btn-primary btn-lg mt-3">Raise Hand</button>
+                </p>
+                <p style="text-align: center">
+                    <button onclick="lowerHand()" class="btn btn-primary btn-lg">Lower Hand</button>
+                </p>
             </div>
         </div>
     </div>

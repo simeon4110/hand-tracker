@@ -65,18 +65,17 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             student.hand = False
             student.save()
 
-    async def set_hand(self, class_id, student_name, hand):
+    async def set_hand(self, class_id, user_name, hand):
         """
         Set's a student's hand to raised (true) or not (false).
         :param class_id: The class the student is in.
-        :param student_name: The student's name.
+        :param user_name: The student's name.
         :param hand: Boolean true = raised.
         :return: Initiates event to reset list of raised hands.
         """
-
         try:
             room = ClassRoom.objects.get(class_number=class_id)
-            student = Student.objects.get(student_name=student_name)
+            student = Student.objects.get(student_name=user_name)
         except Exception as e:
             print(e)
             return None
@@ -89,7 +88,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             {
                 "type": "hand.change",
                 "class_id": class_id,
-                "username": student_name,
+                "username": user_name,
             }
         )
 
