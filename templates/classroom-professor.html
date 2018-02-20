@@ -61,7 +61,10 @@
             table.destroy();
 
             {# Send the reset command #}
-            socket.send(JSON.stringify({"command": "clear-hands", "class_id": "{{ class_number }}"}));
+            socket.send(JSON.stringify({
+                "command": "clear-hands",
+                "class_id": "{{ class_number }}"
+            }));
 
             {# I wish there was a way I could do it without wiping the table every time, but there isn't. #}
             table = $('#class').DataTable({
@@ -91,7 +94,10 @@
         {# Connect to the class after opening socket. #}
         socket.onopen = function (ev) {
             console.log("Connection to websocket opened.");
-            socket.send(JSON.stringify({"command": "join-prof", "class_id": "{{ class_number }}"}));
+            socket.send(JSON.stringify({
+                "command": "join-prof",
+                "class_id": "{{ class_number }}"
+            }));
         };
 
         {# Deal with the incoming messages. #}
