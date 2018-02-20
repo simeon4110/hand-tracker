@@ -123,10 +123,19 @@ def class_run_professor(request):
 
 
 def class_report(request):
+    """
+    Ends a class and displays a beautiful report.
+    :param request: The HTTP request.
+    :return: A render of classroom-report.html.
+    """
+
+    # Check to ensure the request contains a class_id.
     if request.GET.get("class_id") is not None:
         class_number = request.GET.get("class_id")
         try:
             class_room = ClassRoom.objects.get(class_number=class_number)
+            class_room.is_running = False
+            class_room.save()
         except Exception as e:
             print(e)
             return None
@@ -136,8 +145,13 @@ def class_report(request):
         student_list = Student.objects.filter(class_room=class_room).values_list(
             "student_name", "acknowledged")
 
+        # Append all the student data to the student list, delete the student.
         for student in student_list:
             report_list.append([student[0], student[1]])
+            student.delete()
+
+        # Delete the classroom.
+        class_room.delete()
 
         return render(
             request,
