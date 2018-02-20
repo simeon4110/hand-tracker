@@ -24,15 +24,6 @@ class ClassRoom(models.Model):
     def group_name(self):
         return "room-%s" % self.class_number
 
-    @staticmethod
-    def acknowledge(student):
-        """
-        :param student: the student to acknowledge.
-        :return: Nothing.
-        """
-        student.acknowledged += 1
-        student.modifier = 1
-
 
 class Student(models.Model):
     """
@@ -51,3 +42,19 @@ class Student(models.Model):
         :return: student_name
         """
         return self.student_name
+
+    def acknowledge(self):
+        """
+        Acknowledging a student automatically reduces all other student
+        modifiers by 10%.
+        :return: Nothing.
+        """
+        other_students = Student.objects.filter(class_room=self.class_room)
+
+        for student in other_students:
+            student.modifier = student.modifier * 0.9
+            student.save()
+
+        self.acknowledged += 1
+        self.modifier = 1
+        self.save()

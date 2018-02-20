@@ -38,7 +38,7 @@
             socket.send(JSON.stringify({
                 "command": "raise",
                 "class_id": "{{ class_number }}",
-                "student_name": "{{ student_name }}"
+                "student_name": "{{ student_id }}"
             }))
         }
 
@@ -46,7 +46,7 @@
             socket.send(JSON.stringify({
                 "command": "lower",
                 "class_id": "{{ class_number }}",
-                "student_name": "{{ student_name }}"
+                "student_name": "{{ student_id }}"
             }))
         }
 

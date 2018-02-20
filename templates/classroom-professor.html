@@ -39,6 +39,7 @@
         });
 
         {# Clear the table, function initiates a reset of all the student's hand states #}
+
         function clearTable() {
             dataSet = [];
             table.destroy();
@@ -55,6 +56,17 @@
                 ]
             });
             socket.send(JSON.stringify({"command": "clear-hands", "class_id": "{{ class_number }}"}));
+        }
+
+        function acknowledge(student) {
+            student = String(student);
+            console.log("Acknowledging... ");
+            socket.send(JSON.stringify({
+                "command": "acknowledge",
+                "class_id": "{{ class_number }}",
+                "student_name": student
+            }));
+
         }
 
         {# Connect to the class after opening socket. #}
@@ -79,7 +91,8 @@
                 dataSet = [];
 
                 for (var key in data["user_list"]) {
-                    dataSet.push([key, data["user_list"][key], " MAKE BUTTON"]);
+                    var link_text = String("<button class='btn btn-sm' onclick='acknowledge(" + data["user_list"][key][1] + ")'><span class=\"oi oi-check\"></span></button>");
+                    dataSet.push([key, data["user_list"][key][0], link_text]);
                     console.log(dataSet);
                 }
 

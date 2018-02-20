@@ -34,6 +34,9 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         if command == "clear-hands":
             await self.clear_hands(class_id)
 
+        if command == "acknowledge":
+            await self.acknowledge(class_id, user_name)  # Uses ID actually.
+
         if command == "join":
             await self.join_class(class_id, user_name)
 
@@ -45,6 +48,29 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
 
         if command == "lower":
             await self.set_hand(class_id, user_name, False)
+
+    async def acknowledge(self, class_id, user_name):
+        try:
+            room = ClassRoom.objects.get(class_number=class_id)
+        except Exception as e:
+            print(e)
+            return None
+
+        student = Student.objects.get(pk=user_name)
+        student.acknowledge()
+        student.hand = False
+        student.save()
+
+        print("Sending msg...")
+
+        await self.channel_layer.group_send(
+            room.group_name,
+            {
+                "type": "hand.change",
+                "class_id": class_id,
+                "username": user_name,
+            }
+        )
 
     @staticmethod
     async def clear_hands(class_id):
@@ -75,7 +101,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         """
         try:
             room = ClassRoom.objects.get(class_number=class_id)
-            student = Student.objects.get(student_name=user_name)
+            student = Student.objects.get(pk=user_name)
         except Exception as e:
             print(e)
             return None
@@ -176,7 +202,6 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             {
                 "msg_type": 0,
                 "room": event["class_id"],
-                "username": event["username"],
             }
         )
 
@@ -186,9 +211,9 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
 
         for student in Student.objects.filter(
                 class_room=class_room.id).values_list("hand", "student_name",
-                                                      "modifier"):
+                                                      "modifier", "id"):
             if student[0]:
-                hand_list[student[1]] = student[2]
+                hand_list[student[1]] = student[2], student[3]
 
         await self.send_json(
             {
