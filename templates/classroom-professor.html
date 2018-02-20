@@ -16,6 +16,17 @@
                     </table>
                 </div>
             </div>
+            <div class="col-md-10 col-centered mt-3">
+                <p>
+                    <strong>Note:</strong> Lower scores represent how long it's been since a student was last
+                    acknowledged. A score of 1.0 represents the last speaker, a score of 0.0 represents a student who
+                    hasn't yet spoken or hasn't spoken for long enough for their score to return to 0.0. Each time a
+                    student is acknowledged all other students have their scores reduced by 10%.
+                </p>
+                <p>
+                    <strong>Email Reports:</strong> email reports are automatically sent when the class is ended.
+                </p>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -33,7 +44,7 @@
             data: dataSet,
             columns: [
                 {title: "Name"},
-                {title: "Modifier"},
+                {title: "Score"},
                 {title: ""}
             ]
         });
@@ -51,7 +62,7 @@
                 data: dataSet,
                 columns: [
                     {title: "Name"},
-                    {title: "Modifier"},
+                    {title: "Score"},
                     {title: ""}
                 ]
             });
@@ -103,7 +114,7 @@
                     data: dataSet,
                     columns: [
                         {title: "Name"},
-                        {title: "Modifier"},
+                        {title: "Score"},
                         {title: ""}
                     ]
                 });
