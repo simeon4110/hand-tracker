@@ -71,7 +71,7 @@ def class_run_student(request):
                 student_id = new_student.id
             else:
                 student = Student.objects.get(student_name=student_name)
-                if student.class_room != class_number:
+                if student.class_room.class_number != class_number:
                     student.class_room = ClassRoom.objects.get(
                         class_number=class_number)
                     student.acknowledged = 0
