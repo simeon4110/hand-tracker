@@ -46,6 +46,24 @@ def professor_create(request):
     )
 
 
+def student_join(request):
+    """
+    This is the page where students join a running class.
+    :param request: The HTTP request.
+    :return: A render of student.html.
+    """
+
+    return render(
+        request,
+        'student.html',
+        {
+            'title': 'Join Class',
+            'year': datetime.datetime.now().year,
+            'form': StudentJoinForm,
+        }
+    )
+
+
 def class_run_student(request):
     """
     The student page (i.e. the hand's up / hand's down page.)
@@ -163,21 +181,3 @@ def class_report(request):
                 'class_number': class_room.class_number,
             }
         )
-
-
-def student_join(request):
-    """
-    This is the page where students join a running class.
-    :param request: The HTTP request.
-    :return: A render of student.html.
-    """
-
-    return render(
-        request,
-        'student.html',
-        {
-            'title': 'Join Class',
-            'year': datetime.datetime.now().year,
-            'form': StudentJoinForm,
-        }
-    )
