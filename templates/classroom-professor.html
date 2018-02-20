@@ -80,7 +80,6 @@
         {# Acknowledge a student #}
         function acknowledge(student) {
             student = String(student);
-            console.log("Acknowledging... ");
             socket.send(JSON.stringify({
                 "command": "acknowledge",
                 "class_id": "{{ class_number }}",
@@ -121,7 +120,6 @@
 
                     {# Push the data into the dataSet #}
                     dataSet.push([key, data["user_list"][key][0], link_text]);
-                    console.log(dataSet);
                 }
 
                 {# Instantiate new table #}
