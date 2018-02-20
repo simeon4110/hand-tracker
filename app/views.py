@@ -107,10 +107,7 @@ def class_run_professor(request):
         # This check is needed to prevent duplicate classes from being formed.
         if form.is_valid():
             class_number = form.cleaned_data.get("class_number")
-            if ClassRoom.objects.filter(class_number=class_number).exists():
-                professor_name = form.cleaned_data.get("professor_name")
-                professor_email = form.cleaned_data.get("professor_email")
-            else:
+            if not ClassRoom.objects.filter(class_number=class_number).exists():
                 form.save()
 
             return render(

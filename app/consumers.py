@@ -153,7 +153,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
 
     async def leave_class(self, class_id, user_name):
         """
-        :TODO: Fix this!!!!
+        Removes a member from the channel group.
         :param class_id: The class to leave.
         :param user_name: The person leaving.
         :return: An event notifying the room a user has left.
@@ -180,6 +180,11 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def disconnect(self, code):
+        """
+        Standard disconnect method.
+        :param code: The event code.
+        :return: Nothing.
+        """
         await self.leave_class(self.room, "")
 
     # HELPER METHODS -- Handle the message dispatching. And object manipulation.
