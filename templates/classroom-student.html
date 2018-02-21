@@ -14,11 +14,33 @@
                 </p>
             </div>
         </div>
+
+        {# Modal content is hidden on pageload, pops when wss event happens. #}
+        <div class="modal fade" id="handsDown" tabindex="-1" role="dialog" aria-labelledby="handsDown"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="handsDown">New Topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        The professor has lowered everyone's hand, discussion begins anew!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
     <script>
+        {# mmmm... reconnecting websocket.... #}
         var socket = new ReconnectingWebSocket("wss://joshharkema.com:8001/websocket/");
 
         {# Join the class #}
@@ -43,13 +65,14 @@
                 return;
             }
 
-            {# Alert discussion reset. #}
+            {# Pop snazzy modal when the topic is reset. #}
             if (data["msg_type"] === 1) {
-                alert("All hands lowered, new discussion.")
+                $('#handsDown').modal()
             }
         };
 
         {# Raise your hand #}
+
         function raiseHand() {
             console.log({{ student_id }});
             socket.send(JSON.stringify({
@@ -60,6 +83,7 @@
         }
 
         {# Lower your hand #}
+
         function lowerHand() {
             socket.send(JSON.stringify({
                 "command": "lower",
