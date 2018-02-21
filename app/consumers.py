@@ -76,8 +76,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
             }
         )
 
-    @staticmethod
-    async def clear_hands(class_id):
+    async def clear_hands(self, class_id):
         """
         Clears all the hands raised in a ClassRoom.
         :param class_id: The ClassRoom to clear.
@@ -94,6 +93,14 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         for student in student_list:
             student.hand = False
             student.save()
+
+        await self.channel_layer.group_send(
+            room.group_name,
+            {
+                "type": "hand.reset",
+                "class_id": class_id,
+            }
+        )
 
     async def set_hand(self, class_id, user_name, hand):
         """
@@ -204,6 +211,14 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def room_leave(self, event):
+        await self.send_json(
+            {
+                "msg_type": 0,
+                "room": event["class_id"],
+            }
+        )
+
+    async def hand_reset(self, event):
         await self.send_json(
             {
                 "msg_type": 0,

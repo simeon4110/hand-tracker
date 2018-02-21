@@ -31,6 +31,20 @@
             console.log("Sending string.")
         };
 
+        socket.onmessage = function (message) {
+            var data = JSON.parse(message.data);
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            if (data["msg_type"] === 1) {
+                alert("All hands lowered, new discussion.")
+            }
+
+        };
+
         {# Raise your hand #}
         function raiseHand() {
             console.log({{ student_id }});
