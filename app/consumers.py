@@ -221,7 +221,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
     async def hand_reset(self, event):
         await self.send_json(
             {
-                "msg_type": 0,
+                "msg_type": 1,
                 "room": event["class_id"],
             }
         )

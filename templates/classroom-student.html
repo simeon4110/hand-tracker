@@ -32,6 +32,8 @@
         };
 
         socket.onmessage = function (message) {
+            console.log("Got websocket message " + message.data);
+
             var data = JSON.parse(message.data);
 
             if (data.error) {
