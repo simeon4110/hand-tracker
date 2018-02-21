@@ -30,7 +30,7 @@ def send_email_report(email, report, class_number):
     message_text = ""
 
     for item in report:
-        message_text = "\n" + item[0] + ", " + item[1]
+        message_text = message_text + "\n" + item[0] + ", " + item[1]
 
     msg = "From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s" % (
         from_addr, to_addr, subj, date, message_text)
