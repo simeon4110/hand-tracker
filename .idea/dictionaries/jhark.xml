@@ -2,6 +2,7 @@
   <dictionary name="jhark">
     <words>
       <w>onopen</w>
+      <w>smtp</w>
       <w>websocket</w>
     </words>
   </dictionary>

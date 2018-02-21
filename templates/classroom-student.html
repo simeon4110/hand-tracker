@@ -31,20 +31,22 @@
             console.log("Sending string.")
         };
 
+        {# Deal with incoming messages. #}
         socket.onmessage = function (message) {
             console.log("Got websocket message " + message.data);
 
             var data = JSON.parse(message.data);
 
+            {# Alert errors. #}
             if (data.error) {
                 alert(data.error);
                 return;
             }
 
+            {# Alert discussion reset. #}
             if (data["msg_type"] === 1) {
                 alert("All hands lowered, new discussion.")
             }
-
         };
 
         {# Raise your hand #}

@@ -137,3 +137,5 @@ STATIC_ROOT = "./app/static/"
 STATICFILES_DIRS = (
     "./templates/content",
 )
+
+GMAIL_PASSWORD = 'nicetry'
