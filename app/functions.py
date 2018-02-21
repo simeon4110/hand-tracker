@@ -1,6 +1,7 @@
 import smtplib
 import datetime
 
+import hand_tracker.settings
 
 def send_email_report(email, report, class_number):
     """
@@ -13,11 +14,14 @@ def send_email_report(email, report, class_number):
     """
     report = ''.join(report)
 
-    s = smtplib.SMTP('mail.joshharkema.com', 587)
-    s.connect('mail.joshharkema.com', 587)
-    s.login('pythonmailer', 'ToyCar11')
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.ehlo()
+    s.starttls()
+    s.ehlo()
+    s.login('joshuajharkema@gmail.com', 'q5hDTKCq9Kd&Zx7q')
+    s.ehlo()
 
-    from_addr = 'Josh Harkema <josh@joshharkema.com>'
+    from_addr = 'Josh Harkema <joshuajharkema@gmail.com>'
     to_addr = str(email)
 
     subj = "Report for Class Number: %s" % class_number
