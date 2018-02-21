@@ -17,10 +17,10 @@ def send_email_report(email, report, class_number):
     msg = MIMEText(report, "html", "utf-8")
 
     msg['Subject'] = Header("Hand Tracker Report" + class_number, "utf-8")
-    msg['From'] = "noreply@hand-tracker.com"
-    msg["To"] = email
+    email_from = "noreply@hand-tracker.com"
 
-    s = smtplib.SMTP('mail.joshharkema.com')
+    s = smtplib.SMTP('mail.joshharkema.com', 587)
+    s.ehlo()
     s.login('pythonmailer', 'ToyCar11')
-    s.send_message(msg)
-    s.quit()
+    s.sendmail(email_from, email, msg)
+    s.close()
