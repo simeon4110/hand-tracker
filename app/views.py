@@ -197,6 +197,7 @@ def class_report(request):
         try:
             send_email_report(class_room.professor_email, report_list,
                               str(class_room.class_number))
+            messages.success(request, "Email report sent!")
         except Exception as e:
             messages.warning(request, "An error occurred while sending"
                                       " the email report: %s" % e)

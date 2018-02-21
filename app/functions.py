@@ -3,6 +3,7 @@ import datetime
 
 import hand_tracker.settings
 
+
 def send_email_report(email, report, class_number):
     """
     Simple SMTP mailer for sending reports.
@@ -18,7 +19,7 @@ def send_email_report(email, report, class_number):
     s.ehlo()
     s.starttls()
     s.ehlo()
-    s.login('joshuajharkema@gmail.com', 'q5hDTKCq9Kd&Zx7q')
+    s.login('joshuajharkema@gmail.com', hand_tracker.settings.GMAIL_PASSWORD)
     s.ehlo()
 
     from_addr = 'Josh Harkema <joshuajharkema@gmail.com>'
