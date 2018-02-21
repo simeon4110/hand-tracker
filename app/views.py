@@ -191,7 +191,7 @@ def class_report(request):
 
         # Append all the student data to the student list, delete the student.
         for student in student_list:
-            report_list.append([student[0], student[1]])
+            report_list.append([student[0], str(student[1])])
 
         # Attempt to send the email report, post error if fails.
         try:
