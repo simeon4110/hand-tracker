@@ -12,12 +12,15 @@ def send_email_report(email, report, class_number):
     :param class_number:
     :return:
     """
+    report = ''.join(report)
+
     msg = MIMEText(report, "html", "utf-8")
 
     msg['Subject'] = Header("Hand Tracker Report" + class_number, "utf-8")
     msg['From'] = "noreply@hand-tracker.com"
     msg["To"] = email
 
-    s = smtplib.SMTP('127.0.0.1')
+    s = smtplib.SMTP('mail.joshharkema.com')
+    s.login('pythonmailer', 'ToyCar11')
     s.send_message(msg)
     s.quit()
