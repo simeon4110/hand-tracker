@@ -32,9 +32,6 @@
                     hasn't yet spoken or hasn't spoken for long enough for their score to return to 0.0. Each time a
                     student is acknowledged all other students have their scores reduced by 10%.
                 </p>
-                <p>
-                    <strong>Email Reports:</strong> email reports are automatically sent when the class is ended.
-                </p>
             </div>
         </div>
     </div>
@@ -43,10 +40,12 @@
 
 {% block scripts %}
     <!--suppress JSUnresolvedLibraryURL -->
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"
+            integrity="sha384-8g8uXcdgZXxmVzS9bPo9WebRt8GduLrBhtaimcGKQJDTZzt1gZM2K/qsHQ2ShwND"
+            crossorigin="anonymous"></script>
 
     <script>
-        var socket = new WebSocket("wss://joshharkema.com:8001/websocket/");
+        var socket = new ReconnectingWebSocket("wss://joshharkema.com:8001/websocket/");
 
         {# Stores the table data (empty upon initial instantiation) #}
         var dataSet = [];
@@ -65,6 +64,7 @@
         });
 
         {# Clear the table, function initiates a reset of all the student's hand states #}
+
         function clearTable() {
             dataSet = [];
 
@@ -92,6 +92,7 @@
         }
 
         {# Acknowledge a student #}
+
         function acknowledge(student) {
             student = String(student);
             socket.send(JSON.stringify({

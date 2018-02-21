@@ -19,7 +19,7 @@
 
 {% block scripts %}
     <script>
-        var socket = new WebSocket("wss://joshharkema.com:8001/websocket/");
+        var socket = new ReconnectingWebSocket("wss://joshharkema.com:8001/websocket/");
 
         {# Join the class #}
         socket.onopen = function () {

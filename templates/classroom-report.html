@@ -21,9 +21,11 @@
 
 {% block scripts %}
     <!--suppress JSUnresolvedLibraryURL -->
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
-    <script>
+    <script src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"
+            integrity="sha384-8g8uXcdgZXxmVzS9bPo9WebRt8GduLrBhtaimcGKQJDTZzt1gZM2K/qsHQ2ShwND"
+            crossorigin="anonymous"></script>
 
+    <script>
         {# Draw the table #}
         $(document).ready(function () {
             $('#report').DataTable({
@@ -37,7 +39,6 @@
                 ]
             });
         })
-
     </script>
 
 {% endblock %}

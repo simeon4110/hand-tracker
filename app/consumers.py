@@ -48,26 +48,31 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         if command == "lower":
             await self.set_hand(class_id, user_name, False)
 
-    async def acknowledge(self, class_id, user_name):
+    async def acknowledge(self, class_id, user_id):
+        """
+        When a student is acknowledged this calls the ClassRoom.acknowledge
+        method.
+        :param class_id: The class the student is in.
+        :param user_id: The Students pk.
+        :return: A JSON list of all the raised hands.
+        """
         try:
             room = ClassRoom.objects.get(class_number=class_id)
+            student = Student.objects.get(pk=user_id)
         except Exception as e:
             print(e)
             return None
 
-        student = Student.objects.get(pk=user_name)
         student.acknowledge()
         student.hand = False
         student.save()
-
-        print("Sending msg...")
 
         await self.channel_layer.group_send(
             room.group_name,
             {
                 "type": "hand.change",
                 "class_id": class_id,
-                "username": user_name,
+                "username": user_id,
             }
         )
 

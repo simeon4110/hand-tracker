@@ -4,10 +4,14 @@ Definition of views.
 import datetime
 import random
 
+from django.contrib import messages
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.http import HttpRequest
 
 from app.forms import ClassCreationForm
 from app.forms import StudentJoinForm
+from app.functions import send_email_report
 from app.models import ClassRoom
 from app.models import Student
 
@@ -18,6 +22,8 @@ def home(request):
     :param request: The HTTP request.
     :return: A render of index.html.
     """
+    assert isinstance(request, HttpRequest)
+
     return render(
         request,
         'index.html',
@@ -34,6 +40,8 @@ def professor_create(request):
     :param request: The HTTP request.
     :return: A render of professor.html.
     """
+    assert isinstance(request, HttpRequest)
+
     return render(
         request,
         'professor.html',
@@ -52,6 +60,7 @@ def student_join(request):
     :param request: The HTTP request.
     :return: A render of student.html.
     """
+    assert isinstance(request, HttpRequest)
 
     return render(
         request,
@@ -70,11 +79,21 @@ def class_run_student(request):
     :param request: The HTTP request.
     :return: A render of classroom-student.html
     """
+    assert isinstance(request, HttpRequest)
+
     if request.method == 'POST':
         form = StudentJoinForm(request.POST)
+
         if form.is_valid():
             class_number = form.cleaned_data.get("class_number")
             student_name = form.cleaned_data.get("student_name")
+
+            # This is good enough. No need for more.
+            try:
+                ClassRoom.objects.get(class_number=class_number)
+            except Exception as e:
+                messages.warning(request, "An error occurred: " + str(e))
+                return redirect("student")
 
             # Check if the student already exists, if not create the student,
             # if the student exists AND is already in the correct class, use
@@ -118,12 +137,16 @@ def class_run_professor(request):
     :param request: The HTTP request.
     :return: A render of classroom-professor.html
     """
+    assert isinstance(request, HttpRequest)
+
     if request.method == "POST":
         form = ClassCreationForm(request.POST)
 
-        # This check is needed to prevent duplicate classes from being formed.
         if form.is_valid():
             class_number = form.cleaned_data.get("class_number")
+
+            # This check is needed to prevent duplicate classes from being
+            # formed.
             if not ClassRoom.objects.filter(class_number=class_number).exists():
                 form.save()
 
@@ -137,7 +160,10 @@ def class_run_professor(request):
                 }
             )
 
-    return None
+    # If the form is not valid or the request method is not post, add an error
+    # and redirect.
+    messages.warning(request, "Something went wrong, please try again.")
+    return redirect("professor")
 
 
 def class_report(request):
@@ -146,15 +172,17 @@ def class_report(request):
     :param request: The HTTP request.
     :return: A render of classroom-report.html.
     """
+    assert isinstance(request, HttpRequest)
 
     # Check to ensure the request contains a class_id.
     if request.GET.get("class_id") is not None:
         class_number = request.GET.get("class_id")
+
         try:
             class_room = ClassRoom.objects.get(class_number=class_number)
         except Exception as e:
-            print(e)
-            return None
+            messages.warning(request, "An error occurred: " + str(e))
+            return redirect("professor")
 
         report_list = []
 
@@ -164,6 +192,14 @@ def class_report(request):
         # Append all the student data to the student list, delete the student.
         for student in student_list:
             report_list.append([student[0], student[1]])
+
+        # Attempt to send the email report, post error if fails.
+        try:
+            send_email_report(class_room.professor_email, report_list,
+                              str(class_room.class_number))
+        except Exception as e:
+            messages.warning(request, "An error occurred while sending"
+                                      " the email report: %s" % e)
 
         # Delete the classroom.
         class_number = class_room.class_number
