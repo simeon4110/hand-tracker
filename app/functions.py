@@ -13,7 +13,6 @@ def send_email_report(email, report, class_number):
     :param class_number:
     :return:
     """
-    report = ''.join(report)
 
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.ehlo()
@@ -28,7 +27,10 @@ def send_email_report(email, report, class_number):
     subj = "Report for Class Number: %s" % class_number
     date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
 
-    message_text = report
+    message_text = ""
+
+    for item in report:
+        message_text = "\n" + item[0] + ", " + item[1]
 
     msg = "From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s" % (
         from_addr, to_addr, subj, date, message_text)
