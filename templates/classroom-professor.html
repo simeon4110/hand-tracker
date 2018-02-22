@@ -43,14 +43,14 @@
     <script src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"
             integrity="sha384-8g8uXcdgZXxmVzS9bPo9WebRt8GduLrBhtaimcGKQJDTZzt1gZM2K/qsHQ2ShwND"
             crossorigin="anonymous"></script>
-
     <script>
+        {# mmmm... reconnecting websocket.... #}
         var socket = new ReconnectingWebSocket("wss://joshharkema.com:8001/websocket/");
 
-        {# Stores the table data (empty upon initial instantiation) #}
+        {# Stores the table data (empty upon initial instantiation). #}
         var dataSet = [];
 
-        {# Draw the empty table for first run #}
+        {# Draw the empty table for first run. #}
         var table = $('#class').DataTable({
             bFilter: false,
             bInfo: false,
@@ -63,21 +63,22 @@
             ]
         });
 
-        {# Clear the table, function initiates a reset of all the student's hand states #}
+        {# Clear the table, function initiates a reset of all the student's hand states. #}
 
         function clearTable() {
             dataSet = [];
 
-            {# Kill the table #}
+            {# Kill the table. #}
             table.destroy();
 
-            {# Send the reset command #}
+            {# Send the reset command. #}
             socket.send(JSON.stringify({
                 "command": "clear-hands",
                 "class_id": "{{ class_number }}"
             }));
 
-            {# I wish there was a way I could do it without wiping the table every time, but there isn't. #}
+            {# I wish there was a way I could do it without wiping the table every time, but there isn't. Well, beyond #}
+            {# recoding the whole thing to use AJAX instead of websockets... #}
             table = $('#class').DataTable({
                 bFilter: false,
                 bInfo: false,
@@ -91,7 +92,7 @@
             });
         }
 
-        {# Acknowledge a student #}
+        {# Acknowledge a student. #}
 
         function acknowledge(student) {
             student = String(student);
@@ -116,23 +117,23 @@
         socket.onmessage = function (message) {
             console.log("Got websocket message " + message.data);
 
-            {# Parse the data into a JSON object #}
+            {# Parse the data into a JSON object. #}
             var data = JSON.parse(message.data);
 
-            {# Alert any errors #}
+            {# Alert any errors. #}
             if (data.error) {
                 alert(data.error);
                 return;
             }
 
-            {# Redraw the table everytime event type 2 happens #}
+            {# Redraw the table everytime event type 2 happen. #}
             if (data["msg_type"] === 2) {
                 table.destroy();
                 dataSet = [];
 
                 for (var key in data["user_list"]) {
 
-                    {# Create the HTML for the button links #}
+                    {# Create the HTML for the button links. #}
                     var link_text = String("<button class='btn button-primary' onclick='acknowledge(" +
                         data["user_list"][key][1] + ")'><span class=\"oi oi-check\"></span></button>");
 
@@ -140,7 +141,7 @@
                     dataSet.push([key, data["user_list"][key][0], link_text]);
                 }
 
-                {# Instantiate new table #}
+                {# Instantiate new table. #}
                 table = $('#class').DataTable({
                     bFilter: false,
                     bInfo: false,
@@ -153,7 +154,7 @@
                     ]
                 });
 
-                {# Draw the table #}
+                {# Draw the table. #}
                 table.draw();
             }
         }
