@@ -197,11 +197,7 @@ class ClassConsumer(AsyncJsonWebsocketConsumer):
         :param code: The event code.
         :return: Nothing.
         """
-        # If the classroom still exists, disconnect gracefully.
-        if ClassRoom.objects.filter(class_number=self.room).exists():
-            await self.leave_class(self.room, "")
-        else:
-            await self.close()
+        await self.leave_class(self.room, "")
 
     # HELPER METHODS -- Handle the message dispatching. And object manipulation.
 
